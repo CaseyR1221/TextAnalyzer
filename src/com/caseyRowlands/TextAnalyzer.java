@@ -42,7 +42,7 @@ public class TextAnalyzer {
         while ((line = reader.readLine()) != null) {   	
         	
             // Split the line into words and eliminate all characters except letters, then count the frequency of each word
-            String[] words = line.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
+            String[] words = line.replaceAll("[^A-Za-z— ]", "").toLowerCase().split("\\s+|—");
             
             for (String word : words) {
                 if (word.length() > 0) {
@@ -53,10 +53,19 @@ public class TextAnalyzer {
         
         reader.close();        
         
-        System.out.println("All Words From The Poem Sorted By Highest Frequency:");
+        System.out.println("The 20 Words With The Highest Frequencies:");
         System.out.println("");
         
         firstTwentySorted(wordFreq);
+        
+        System.out.println("");
+        System.out.println("--------------------------------");
+        System.out.println("");
+        
+        System.out.println("All Words From The Poem Sorted By Highest Frequency:");
+        System.out.println("");
+        
+        fullSortedlist(wordFreq);
 
 	}
 	
@@ -76,19 +85,19 @@ public class TextAnalyzer {
         }
     }
 	
-//	public static void fullSortedlist(Map<String, Integer> unsortedMap) {
-//    	// Turn the list into a LinkedHashMap to keep the insertion order and then sort all the word in descending order
-//        LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet()
-//      	      .stream()
-//      	      .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-//      	      .collect(Collectors.toMap(
-//      	    	  e -> e.getKey(),
-//      	    	  e -> e.getValue(),
-//      	          (e1, e2) -> e1, LinkedHashMap::new));
-//      
-//        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-//            System.out.println(entry.getKey() + ": " + entry.getValue());
-//        }
-//    }
+	public static void fullSortedlist(Map<String, Integer> unsortedMap) {
+    	// Turn the list into a LinkedHashMap to keep the insertion order and then sort all the word in descending order
+        LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet()
+      	      .stream()
+      	      .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+      	      .collect(Collectors.toMap(
+      	    	  e -> e.getKey(),
+      	    	  e -> e.getValue(),
+      	          (e1, e2) -> e1, LinkedHashMap::new));
+      
+        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
 
 }

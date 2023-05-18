@@ -56,15 +56,16 @@ public class TextAnalyzer {
         System.out.println("All Words From The Poem Sorted By Highest Frequency:");
         System.out.println("");
         
-        fullSortedlist(wordFreq);
+        firstTwentySorted(wordFreq);
 
 	}
 	
-	public static void fullSortedlist(Map<String, Integer> unsortedMap) {
-    	// Turn the list into a LinkedHashMap to keep the insertion order and then sort all the word in descending order
+	public static void firstTwentySorted(Map<String, Integer> unsortedMap) {
+    	// Turn the list into a LinkedHashMap to keep the insertion order and then sort and return the top 20 words with the highest frequencies
         LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet()
       	      .stream()
       	      .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+      	      .limit(20)
       	      .collect(Collectors.toMap(
       	    	  e -> e.getKey(),
       	    	  e -> e.getValue(),
@@ -74,5 +75,20 @@ public class TextAnalyzer {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
+	
+//	public static void fullSortedlist(Map<String, Integer> unsortedMap) {
+//    	// Turn the list into a LinkedHashMap to keep the insertion order and then sort all the word in descending order
+//        LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet()
+//      	      .stream()
+//      	      .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+//      	      .collect(Collectors.toMap(
+//      	    	  e -> e.getKey(),
+//      	    	  e -> e.getValue(),
+//      	          (e1, e2) -> e1, LinkedHashMap::new));
+//      
+//        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+//            System.out.println(entry.getKey() + ": " + entry.getValue());
+//        }
+//    }
 
 }

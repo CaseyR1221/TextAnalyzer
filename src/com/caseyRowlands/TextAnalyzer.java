@@ -25,11 +25,17 @@ public class TextAnalyzer {
 		Document doc = Jsoup.connect(html).get();
 		
 		Elements content = doc.getElementsByClass("chapter");
+		Elements title = doc.getElementsByTag("h1");
+		Elements author = doc.getElementsByTag("h2");
 		
 		String contentText = content.text();
+		String titleText = title.text();
+		String authorText = author.text();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter("src/testFile.txt"));
 		
+		writer.write(titleText + " ");
+		writer.write(authorText + " ");
 		writer.write(contentText);
 	
     	writer.close();

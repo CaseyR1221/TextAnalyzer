@@ -18,92 +18,85 @@ import org.jsoup.select.Elements;
 public class TextAnalyzer {
 
 	public static void main(String[] args) throws IOException {
-		
-		
+
 		String html = "https://www.gutenberg.org/files/1065/1065-h/1065-h.htm";
-    	
+
 		Document doc = Jsoup.connect(html).get();
-		
+
 		Elements content = doc.getElementsByClass("chapter");
 		Elements title = doc.getElementsByTag("h1");
 		Elements author = doc.getElementsByTag("h2");
-		
+
 		String contentText = content.text();
 		String titleText = title.text();
 		String authorText = author.text();
-		
+
 		BufferedWriter writer = new BufferedWriter(new FileWriter("src/testFile.txt"));
-		
+
 		writer.write(titleText + " ");
 		writer.write(authorText + " ");
 		writer.write(contentText);
-	
-    	writer.close();
-		
+
+		writer.close();
+
 		// Read each line of the file
-        BufferedReader reader = new BufferedReader(new FileReader("src/testFile.txt"));
-        String line;      
-        Map<String, Integer> wordFreq = new HashMap<>();
-        
-        while ((line = reader.readLine()) != null) {   	
-        	
-            // Split the line into words and eliminate all characters except letters, then count the frequency of each word
-            String[] words = line.replaceAll("[^A-Za-z— ]", "").toLowerCase().split("\\s+|—");
-            
-            for (String word : words) {
-                if (word.length() > 0) {
-                    wordFreq.put(word, wordFreq.getOrDefault(word, 0) + 1);
-                }
-            }
-        }
-        
-        reader.close();        
-        
-        System.out.println("The 20 Words With The Highest Frequencies:");
-        System.out.println("");
-        
-        firstTwentySorted(wordFreq);
-        
-        System.out.println("");
-        System.out.println("--------------------------------");
-        System.out.println("");
-        
-        System.out.println("All Words From The Poem Sorted By Highest Frequency:");
-        System.out.println("");
-        
-        fullSortedlist(wordFreq);
+		BufferedReader reader = new BufferedReader(new FileReader("src/testFile.txt"));
+		String line;
+		Map<String, Integer> wordFreq = new HashMap<>();
+
+		while ((line = reader.readLine()) != null) {
+
+			// Split the line into words and eliminate all characters except letters, then
+			// count the frequency of each word
+			String[] words = line.replaceAll("[^A-Za-z— ]", "").toLowerCase().split("\\s+|—");
+
+			for (String word : words) {
+				if (word.length() > 0) {
+					wordFreq.put(word, wordFreq.getOrDefault(word, 0) + 1);
+				}
+			}
+		}
+
+		reader.close();
+
+		System.out.println("The 20 Words With The Highest Frequencies:");
+		System.out.println("");
+
+		firstTwentySorted(wordFreq);
+
+		System.out.println("");
+		System.out.println("--------------------------------");
+		System.out.println("");
+
+		System.out.println("All Words From The Poem Sorted By Highest Frequency:");
+		System.out.println("");
+
+		fullSortedlist(wordFreq);
 
 	}
-	
+
 	public static void firstTwentySorted(Map<String, Integer> unsortedMap) {
-    	// Turn the list into a LinkedHashMap to keep the insertion order and then sort and return the top 20 words with the highest frequencies
-        LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet()
-      	      .stream()
-      	      .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-      	      .limit(20)
-      	      .collect(Collectors.toMap(
-      	    	  e -> e.getKey(),
-      	    	  e -> e.getValue(),
-      	          (e1, e2) -> e1, LinkedHashMap::new));
-      
-        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-	
+		// Turn the list into a LinkedHashMap to keep the insertion order and then sort
+		// and return the top 20 words with the highest frequencies
+		LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet().stream()
+				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(20)
+				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e1, LinkedHashMap::new));
+
+		for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+	}
+
 	public static void fullSortedlist(Map<String, Integer> unsortedMap) {
-    	// Turn the list into a LinkedHashMap to keep the insertion order and then sort all the word in descending order
-        LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet()
-      	      .stream()
-      	      .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-      	      .collect(Collectors.toMap(
-      	    	  e -> e.getKey(),
-      	    	  e -> e.getValue(),
-      	          (e1, e2) -> e1, LinkedHashMap::new));
-      
-        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
+		// Turn the list into a LinkedHashMap to keep the insertion order and then sort
+		// all the word in descending order
+		LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet().stream()
+				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e1, LinkedHashMap::new));
+
+		for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+	}
 
 }

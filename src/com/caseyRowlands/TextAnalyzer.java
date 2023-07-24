@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,7 +15,7 @@ import org.jsoup.select.Elements;
 
 public class TextAnalyzer {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 
 		String html = "https://www.gutenberg.org/files/1065/1065-h/1065-h.htm";
 
@@ -58,45 +56,10 @@ public class TextAnalyzer {
 		}
 
 		reader.close();
+		
+		DatabaseInserter db = new DatabaseInserter();
+		db.insertAndReadFromDB(wordFreq);
 
-		System.out.println("The 20 Words With The Highest Frequencies:");
-		System.out.println("");
-
-		firstTwentySorted(wordFreq);
-
-		System.out.println("");
-		System.out.println("--------------------------------");
-		System.out.println("");
-
-		System.out.println("All Words From The Poem Sorted By Highest Frequency:");
-		System.out.println("");
-
-		fullSortedlist(wordFreq);
-
-	}
-
-	public static void firstTwentySorted(Map<String, Integer> unsortedMap) {
-		// Turn the list into a LinkedHashMap to keep the insertion order and then sort
-		// and return the top 20 words with the highest frequencies
-		LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(20)
-				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e1, LinkedHashMap::new));
-
-		for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-			System.out.println(entry.getKey() + ": " + entry.getValue());
-		}
-	}
-
-	public static void fullSortedlist(Map<String, Integer> unsortedMap) {
-		// Turn the list into a LinkedHashMap to keep the insertion order and then sort
-		// all the word in descending order
-		LinkedHashMap<String, Integer> sortedMap = unsortedMap.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e1, LinkedHashMap::new));
-
-		for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-			System.out.println(entry.getKey() + ": " + entry.getValue());
-		}
 	}
 
 }
